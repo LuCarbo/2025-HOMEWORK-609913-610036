@@ -1,7 +1,5 @@
 
 
-
-
 /**
  * Classe Stanza - una stanza in un gioco di ruolo.
  * Una stanza e' un luogo fisico nel gioco.
@@ -124,11 +122,13 @@ public class Stanza {
     	risultato.append(this.nome);
     	risultato.append("\nUscite: ");
     	for (String direzione : this.direzioni)
-    		if (direzione!=null)
+    		if (direzione!=null) {
     			risultato.append(" " + direzione);
-    	risultato.append("\nAttrezzi nella stanza: ");
-    	for (Attrezzo attrezzo : this.attrezzi) {
-    		risultato.append(attrezzo.toString()+" ");
+    			risultato.append("\nAttrezzi nella stanza: ");
+    			for (Attrezzo attrezzo : this.attrezzi) {
+    				if(attrezzo != null)
+    					risultato.append(attrezzo.toString()+" ");	
+    		}
     	}
     	return risultato.toString();
     }
@@ -157,19 +157,37 @@ public class Stanza {
 		Attrezzo attrezzoCercato;
 		attrezzoCercato = null;
 		for (Attrezzo attrezzo : this.attrezzi) {
-			if (attrezzo.getNome().equals(nomeAttrezzo))
+			if(attrezzo.getNome().equals(nomeAttrezzo)) {
 				attrezzoCercato = attrezzo;
+				break;
+			}
+				
 		}
 		return attrezzoCercato;	
 	}
+// codice di prova per errore prendi attrezzo
+//	for (Attrezzo attrezzo : this.attrezzi) {
+//		if(attrezzo == null) {
+//			
+//		}	
+//		else if(attrezzo.getNome().equals(nomeAttrezzo))
+//			attrezzoCercato = attrezzo;
+//	}
 
 	/**
 	 * Rimuove un attrezzo dalla stanza (ricerca in base al nome).
 	 * @param nomeAttrezzo
 	 * @return true se l'attrezzo e' stato rimosso, false altrimenti
 	 */
-	public boolean removeAttrezzo(Attrezzo attrezzo) {
-		// TODO da implementare
+	public boolean removeAttrezzo(String nomeAttrezzo) {
+		Attrezzo a = null;
+		for (int i= 0; i<this.numeroAttrezzi; i++) {
+			if (this.attrezzi[i].getNome().equals(nomeAttrezzo)) {
+				a = attrezzi[i];
+				attrezzi[i] = null;
+				this.numeroAttrezzi--;
+			}	
+		}
 		return false;
 	}
 

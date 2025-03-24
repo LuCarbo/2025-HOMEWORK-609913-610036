@@ -7,11 +7,6 @@ import java.util.Scanner;
  * Per giocare crea un'istanza di questa classe e invoca il letodo gioca
  *
  * Questa e' la classe principale crea e istanzia tutte le altre
- *
- * @author  docente di POO 
- *         (da un'idea di Michael Kolling and David J. Barnes) 
- *          
- * @version base
  */
 
 public class DiaDia {
@@ -26,7 +21,7 @@ public class DiaDia {
 			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
 			"Per conoscere le istruzioni usa il comando 'aiuto'.";
 	
-	static final private String[] elencoComandi = {"vai", "aiuto", "fine"};
+	static final private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa"};
 
 	private Partita partita;
 
@@ -43,6 +38,7 @@ public class DiaDia {
 		do		
 			istruzione = scannerDiLinee.nextLine();
 		while (!processaIstruzione(istruzione));
+		scannerDiLinee.close();
 	}   
 
 
@@ -57,12 +53,16 @@ public class DiaDia {
 		if (comandoDaEseguire.getNome().equals("fine")) {
 			this.fine(); 
 			return true;
-		} else if (comandoDaEseguire.getNome().equals("vai"))
-			this.vai(comandoDaEseguire.getParametro());
+		} 
+		else if (comandoDaEseguire.getNome().equals("vai"))
+				this.vai(comandoDaEseguire.getParametro());
 		else if (comandoDaEseguire.getNome().equals("aiuto"))
-			this.aiuto();
-		else
-			System.out.println("Comando sconosciuto");
+				this.aiuto();
+		else if(comandoDaEseguire.getNome().equals("prendi"))
+				this.prendi(comandoDaEseguire.getParametro());
+		else if(comandoDaEseguire.getNome().equals("posa")) 
+				this.posa(comandoDaEseguire.getParametro());
+		else System.out.println("Comando sconosciuto");
 		if (this.partita.vinta()) {
 			System.out.println("Hai vinto!");
 			return true;
@@ -89,17 +89,35 @@ public class DiaDia {
 		if(direzione==null)
 			System.out.println("Dove vuoi andare ?");
 		Stanza prossimaStanza = null;
-		prossimaStanza = this.partita.getStanzaCorrente().getStanzaAdiacente(direzione);
+		prossimaStanza = this.partita.getGiocatore().getStanzaCorrente().getStanzaAdiacente(direzione);
 		if (prossimaStanza == null)
 			System.out.println("Direzione inesistente");
 		else {
-			this.partita.setStanzaCorrente(prossimaStanza);
-			int cfu = this.partita.getCfu();
-			this.partita.setCfu(cfu--);
+			this.partita.getGiocatore().setStanzaCorrente(prossimaStanza);
+			int cfu = this.partita.getGiocatore().getCfu();
+			this.partita.getGiocatore().setCfu(cfu--);
 		}
-		System.out.println(partita.getStanzaCorrente().getDescrizione());
+		System.out.println(partita.getGiocatore().getStanzaCorrente().getDescrizione());
 	}
 
+	/**
+	 * Comando "Prendi", rimuove l'oggetto richiesto dalla stanza e 
+	 * lo aggiunge alla borsa.
+	 */
+	private void prendi(String nomeAttrezzo) {
+		Attrezzo a = this.partita.getGiocatore().getStanzaCorrente().getAttrezzo(nomeAttrezzo);
+		this.partita.getGiocatore().getBorsa().addAttrezzo(a);
+		this.partita.getGiocatore().getStanzaCorrente().removeAttrezzo(a.getNome());	
+	}
+	
+	/**
+	 * Comando "posa" rimuove un attrezzo dalla borsa e lo aggiunge alla stanza corrente.
+	 */
+	private void posa(String nomeAttrezzo) {
+		Attrezzo a = this.partita.getGiocatore().getBorsa().getAttrezzo(nomeAttrezzo);
+		this.partita.getGiocatore().getStanzaCorrente().addAttrezzo(a);
+		this.partita.getGiocatore().getBorsa().removeAttrezzo(a.getNome());
+	}
 	/**
 	 * Comando "Fine".
 	 */
