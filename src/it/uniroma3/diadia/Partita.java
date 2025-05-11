@@ -42,12 +42,17 @@ public class Partita {
 		return giocatore.getStanzaCorrente() == labirinto.getStanzaVincente();
 	}
 	
+	public boolean giocatoreIsVivo() {
+		if(giocatore.getCfu() == 0) return false;
+		else return true;
+	}
+	
 	/**
 	 * Restituisce vero se e solo se la partita e' finita
 	 * @return vero se partita finita
 	 */
 	public boolean isFinita() {
-		return finita || vinta() || (giocatore.getCfu() == 0);
+		return finita || vinta() || !giocatoreIsVivo();
 	}
 	
 	/**

@@ -12,7 +12,7 @@ class StanzaTest {
 	private Attrezzo attrezzo;
 	
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		this.stanza = new Stanza("n11");
 		this.attrezzo = new Attrezzo("spada", 10);
 	}

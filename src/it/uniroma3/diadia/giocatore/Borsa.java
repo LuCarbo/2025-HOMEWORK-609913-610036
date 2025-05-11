@@ -34,7 +34,9 @@ public class Borsa {
 	public int getPesoMax() {
 			return pesoMax;
 	}
-	
+	/**
+	 * Prende il riferimento ad un atrezzo nella borsa
+	 */
 	public Attrezzo getAttrezzo(String nomeAttrezzo) {
 		Attrezzo a = null;
 		for (int i= 0; i<this.numeroAttrezzi; i++)
