@@ -1,41 +1,51 @@
 package it.uniroma3.diadia.comandi;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.util.Scanner;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.IO;
 
-class FabbricaDiComandiFisarmonicaTest {
-	private IOConsole io;
-	private Partita partita;
-	private Comando comando;
-	private FabbricaDiComandi fabbrica;
-	@BeforeEach
-	void setUp() throws Exception {
-		this.io = new IOConsole();
-		this.fabbrica = new FabbricaDiComandiFisarmonica();
-		
+public class FabbricaDiComandiFisarmonicaTest {
+
+	private FabbricaDiComandiFisarmonica fabbrica;
+	private IO io;
+	private Comando expected;
+	
+	@Before
+	public void setUp() throws Exception {
+		io = new IOConsole(new Scanner(System.in));
+		fabbrica = new FabbricaDiComandiFisarmonica(io);
+	}
+
+	@After
+	public void tearDown() throws Exception {
 	}
 
 	@Test
-	void testCostruisciComando_NonValido() {
-		this.comando = new ComandoNonValido();
-		assertEquals(this.comando.getNome(), this.fabbrica.costruisciComando("Cazzata").getNome());
-	}
-	@Test
-	void testCostruisciComando_Funzionante() {
-		this.comando = new ComandoFine();
-		assertEquals(this.comando.getNome(), this.fabbrica.costruisciComando("fine").getNome());
+	public void testComandoNonValido() {
+		expected = new ComandoNonValido();
+		assertEquals( expected.getNome(), fabbrica.costruisciComando("pippo").getNome());
 	}
 	
 	@Test
-	void testCostruisciComando_Parametro() {
-		this.comando = fabbrica.costruisciComando("vai nord");
-		String expected = "nord";
-		assertEquals(this.comando.getNome(), this.fabbrica.costruisciComando("vai").getNome());
-		assertEquals(this.comando.getParametro(), expected);
+	public void testComandoConParametro() {
+		expected = new ComandoVai();
+		expected.setParametro("nord");
+		Comando current = fabbrica.costruisciComando("vai nord");
+		assertEquals( expected.getNome(), current.getNome());
+		assertEquals( expected.getParametro(), current.getParametro());
 	}
+	
+	@Test
+	public void testComandoSenzaParametro() {
+		expected = new ComandoFine();
+		assertEquals( expected.getNome(), fabbrica.costruisciComando("fine").getNome());
+	}
+
 }

@@ -1,47 +1,49 @@
 package it.uniroma3.diadia;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.io.FileNotFoundException;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import it.uniroma3.diadia.ambienti.Labirinto;
-import it.uniroma3.diadia.giocatore.Giocatore;
+import it.uniroma3.diadia.ambienti.Stanza;
 
-class PartitaTest {
-	private Partita partita;
+public class PartitaTest {
 
-	
-	@BeforeEach
-	void setUp() throws Exception {
-		this.partita = new Partita();
+	Labirinto labirinto;
+	Partita p;
+	Stanza s;
 
-	}
-
-	@Test
-	void testNuovaPartita_Vinta() {
-		this.partita.getGiocatore().setStanzaCorrente(this.partita.getLabirinto().getStanzaVincente());
-		assertTrue(this.partita.isFinita());
-	}
-	
-	@Test
-	void testPartita_Persa() {
-		this.partita.getGiocatore().setCfu(0);
-		assertTrue(this.partita.isFinita());
+	@Before
+	public void setUp() throws FileNotFoundException, FormatoFileNonValidoException {
+		 labirinto = Labirinto.newBuilder("labirinto2.txt").getLabirinto();
+//				.addStanzaIniziale("Atrio")
+//				.addAttrezzo("martello", 3)
+//				.addStanzaVincente("Biblioteca")
+//				.addAdiacenza("Atrio", "Biblioteca", "nord")
+//				.getLabirinto();
+		 p = new Partita(labirinto);
+		 s = new Stanza("Stanza");
 	}
 	
 	@Test
-	void testPartita_Finita() {
-		assertFalse(this.partita.isFinita());
-		this.partita.setFinita();
-		assertTrue(this.partita.isFinita());
+	public void testGetStanzaVincente() {
+		assertEquals("Biblioteca", p.getLabirinto().getStanzaVincente().getNome());
 	}
-	
-	@Test
-	void testPartita_NonFinita() {
-		assertFalse(this.partita.isFinita());
-	}
-	
-	
 
+	@Test
+	public void testSetStanzaCorrente() {
+		p.getLabirinto().setStanzaCorrente(s);
+		assertEquals(s, p.getLabirinto().getStanzaCorrente());
+	}
+
+	@Test
+	public void testIsFinita() {
+		
+		assertFalse(p.isFinita());
+	}
+	
 }

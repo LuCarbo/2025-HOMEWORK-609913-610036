@@ -1,32 +1,36 @@
 package it.uniroma3.diadia.ambienti;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
-class StanzaBuiaTest {
-	
-	private StanzaBuia stanzaBuia;
-	private Attrezzo attrezzo;
-	
-	@BeforeEach
-	void setUp() throws Exception {
-		this.stanzaBuia = new StanzaBuia("Oscura", "Cerino");
-		this.attrezzo = new Attrezzo("Cerino", 2);
+public class StanzaBuiaTest {
+
+	private StanzaBuia stanza;
+	private Attrezzo lumino;
+	@Before
+	public void setUp() throws Exception {
+		stanza = new StanzaBuia("StanzaBuia", "lumino");
+		lumino = new Attrezzo("lumino", 1);
+	}
+
+	@After
+	public void tearDown() throws Exception {
 	}
 
 	@Test
-	void testGetDescrizione_attrezzoMancante() {
-		assertFalse(this.stanzaBuia.hasAttrezzo("Cerino"));
+	public void testGetDescrizioneConAttrezzo() {
+		stanza.addAttrezzo(lumino);
+		assertEquals(stanza.toString(), stanza.getDescrizione());
 	}
 	
 	@Test
-	void testGetDescrizione_attrezzoPresente() {
-		this.stanzaBuia.addAttrezzo(this.attrezzo);
-		assertTrue(this.stanzaBuia.hasAttrezzo("Cerino"));
+	public void testGetDescrizioneSenzaAttrezzo() {
+		String e = "qui c'è un buio pesto";
+		assertEquals(e, stanza.getDescrizione());
 	}
-
 }
